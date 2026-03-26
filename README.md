@@ -2,12 +2,19 @@ I’m excited to share my recent project on an AI-Driven Crop Recommendation Sys
 
 This system analyzes key soil and climate parameters such as:
 
+<img width="634" height="508" alt="Screenshot 2026-03-23 174212" src="https://github.com/user-attachments/assets/4e26f735-5e77-406d-804a-a22cdc244b96" />
+
 Nitrogen (N), Phosphorus (P), Potassium (K)
 Soil pH level
 Temperature, Humidity
 Rainfall
 
 Based on these inputs, the model provides accurate crop recommendations, helping farmers choose the most suitable crops for their land conditions.
+
+
+<img width="229" height="454" alt="Screenshot 2026-03-23 180411" src="https://github.com/user-attachments/assets/eae7dbf9-6c44-4777-a44d-6c014c6d6376" />
+
+
 
 💡 What makes this project unique?
 
@@ -29,5 +36,4 @@ Built with a user-friendly interface for easy input and analysis
 
 <img width="1472" height="742" alt="Screenshot 2026-03-26 172043" src="https://github.com/user-attachments/assets/958eb60a-74bc-4386-ae6e-764f55a2eee4" />
 
-![cebe1b9fcc63f2234b2447fb51e5fcc7](https://github.com/user-attachments/assets/d8e5214d-a8e3-4feb-a012-32e649da4876)
 
