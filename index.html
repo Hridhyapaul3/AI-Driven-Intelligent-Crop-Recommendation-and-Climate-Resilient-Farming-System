@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>AGRIMINDX 2025</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🌱 AGRIMINDX 2025</h1>
+<h3>AI Crop Recommendation System</h3>
+
+<form method="POST">
+
+<input name="N" placeholder="Nitrogen">
+<input name="P" placeholder="Phosphorus">
+<input name="K" placeholder="Potassium">
+<input name="temperature" placeholder="Temperature">
+<input name="humidity" placeholder="Humidity">
+<input name="ph" placeholder="pH">
+<input name="rainfall" placeholder="Rainfall">
+
+<button type="submit">Predict Crop</button>
+
+</form>
+
+{% if result %}
+
+<div class="result-wrapper">
+
+<div class="result-box">
+
+<h2>🌾 Recommended Crop: {{result}}</h2>
+<p>📊 Confidence: {{confidence}} %</p>
+
+</div>
+
+
+<div class="explanation-box">
+
+<h3>🔍 Why was this crop recommended?</h3>
+
+<ul>
+{% for f in top_factors %}
+<li><b>{{f.feature}}</b> → Impact {{f.impact}}</li>
+{% endfor %}
+</ul>
+
+<h3>🌱 Alternative Crops</h3>
+
+<ul>
+{% for a in alternatives %}
+<li>{{a.crop}} – {{a.prob}}%</li>
+{% endfor %}
+</ul>
+
+</div>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
