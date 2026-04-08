@@ -1,46 +1,162 @@
-I’m excited to share my recent project on an AI-Driven Crop Recommendation System, designed to support smarter and more sustainable farming decisions.
+# 🌾 Crop Recommendation System
 
-This system analyzes key soil and climate parameters such as:
+> AI-powered multi-model ensemble that recommends the best crop based on
+> soil nutrients, climate conditions, and engineered agronomic features.
 
-<img width="634" height="508" alt="Screenshot 2026-03-23 174212" src="https://github.com/user-attachments/assets/4e26f735-5e77-406d-804a-a22cdc244b96" />
+---
 
-Nitrogen (N), Phosphorus (P), Potassium (K)
-Soil pH level
-Temperature, Humidity
-Rainfall
+## 📊 Model Performance
 
-Based on these inputs, the model provides accurate crop recommendations, helping farmers choose the most suitable crops for their land conditions.
+| Metric | Score |
+|---|---|
+| Weighted Ensemble Accuracy | **99.77 %** |
+| Cohen's Kappa | **~0.998** |
+| Macro F1-Score | **~0.998** |
+| Classes | 22 crops |
+| Features | 22 engineered |
 
+---
 
-<img width="229" height="454" alt="Screenshot 2026-03-23 180411" src="https://github.com/user-attachments/assets/eae7dbf9-6c44-4777-a44d-6c014c6d6376" />
+## 🗂 Project Structure
 
-The system follows a structured workflow:
-The  project follows a systematic and well-defined workflow that transforms raw agricultural data into meaningful crop recommendations through multiple stages of processing and analysis. The process begins with the collection of input data from the user, which includes essential soil parameters such as Nitrogen (N), Phosphorus (P), Potassium (K), and pH value, along with important climatic conditions like temperature, humidity, and rainfall. These inputs are carefully validated to ensure they fall within acceptable ranges for accurate prediction. Once the data is collected, it undergoes a feature engineering phase, where additional derived features such as soil health score, nutrient balance index, and climate suitability index are computed to enhance the quality and representation of the data. This enriched dataset is then passed to the model processing stage, where multiple machine learning algorithms including XGBoost, LightGBM, Random Forest, and ExtraTrees are applied simultaneously as part of an ensemble learning approach. Each model independently analyzes the input data and generates predictions, which are then combined using a voting mechanism to produce a final, highly accurate crop recommendation. After the prediction is generated, the system employs SHAP (SHapley Additive exPlanations) to interpret the results by identifying and quantifying the contribution of each input feature toward the final decision. This step ensures transparency and helps users understand why a particular crop was recommended. Finally, the output is presented to the user through an intuitive interface, where the recommended crop is displayed along with insights into the influencing factors, enabling informed decision-making. This structured workflow ensures efficiency, accuracy, and reliability in the crop recommendation process while making the system accessible and understandable for end users..
+```
+crop-recommendation/
+├── Crop_recommendation.csv          # Dataset
+├── crop_recommendation_sklearn.py   # Training pipeline
+├── predict_with_shap.py             # CLI prediction + SHAP
+├── app.py                           # Flask web app
+├── requirements.txt
+├── saved_models/                    # Auto-created after training
+│   ├── rf_all_model.pkl
+│   ├── scaler.pkl
+│   ├── label_encoder.pkl
+│   ├── feature_names.pkl
+│   └── model_weights.pkl
+├── templates/
+│   ├── index.html                   # Main UI
+│   └── history.html                 # Prediction history
+└── plots/                           # Auto-created after training
+```
 
+---
 
+## 🚀 Quick Start
 
+### 1. Install dependencies
 
-💡 What makes this project unique?
+```bash
+pip install -r requirements.txt
+```
 
-Integrates both soil nutrients and real-time climate factors
-Focuses on data-driven decision making
-Aims to improve crop yield and reduce risk
-Built with a user-friendly interface for easy input and analysis
+### 2. Train the models
 
-🚀 Key Features:
-✔ Intelligent crop prediction
-✔ Simple and interactive UI
-✔ Preset crop testing (Rice, Maize, Mango, Cotton, Watermelon)
-✔ Practical application for precision agriculture
+```bash
+python crop_recommendation_sklearn.py
+```
 
-📊 This project reflects my interest in Data Science, Machine Learning, and real-world problem solving, especially in the agriculture domain.
+This creates `saved_models/`, `plots/`, and `performance_report.txt`.
 
+### 3. Run the web app
 
+```bash
+python app.py
+```
 
+Visit **http://localhost:5000**
 
-<img width="1472" height="742" alt="Screenshot 2026-03-26 172043" src="https://github.com/user-attachments/assets/958eb60a-74bc-4386-ae6e-764f55a2eee4" />
-<img width="1316" height="646" alt="image" src="https://github.com/user-attachments/assets/b88e1d71-61d7-4368-a754-fc504adf6117" />
-<img width="1836" height="840" alt="image" src="https://github.com/user-attachments/assets/98f13e01-4642-42ed-a08b-fda9b4f24dab" />
+### 4. Use the REST API
 
+```bash
+curl -X POST http://localhost:5000/api/predict \
+     -H "Content-Type: application/json" \
+     -d '{"N":90,"P":42,"K":43,"temperature":21,"humidity":82,"ph":6.5,"rainfall":203}'
+```
 
+Response:
+```json
+{
+  "success": true,
+  "result": "rice",
+  "confidence": 99.8,
+  "alternatives": [...],
+  "top_factors": [...]
+}
+```
 
+### 5. CLI prediction with SHAP
+
+```bash
+python predict_with_shap.py
+```
+
+---
+
+## 🤖 Models Used
+
+| Model | Feature Set | Test Accuracy |
+|---|---|---|
+| Random Forest (tuned) | All 22 features | 99.32 % |
+| Extra Trees | All 22 features | 99.09 % |
+| XGBoost | All 22 features | ~99.5 % |
+| LightGBM | All 22 features | ~99.4 % |
+| Gradient Boosting (×2) | All / Soil+Climate | 98.64 % |
+| KNN | All 22 features | 97.50 % |
+| Decision Tree | Interaction features | 93.86 % |
+| **Weighted Ensemble** | — | **99.77 %** |
+| **Stacking Ensemble** | — | **~99.8 %** |
+
+---
+
+## 🔬 Feature Engineering
+
+Beyond the raw 7 inputs (N, P, K, temperature, humidity, pH, rainfall):
+
+- NPK ratios and sums
+- Pairwise nutrient interactions
+- Soil health score (weighted formula)
+- Climate index
+- Nutrient balance score
+- pH deviation from ideal (6.5)
+- Aridity index
+
+---
+
+## 🌐 API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET/POST | `/` | Main web UI |
+| POST | `/api/predict` | JSON prediction API |
+| GET | `/history` | Last 50 predictions |
+| GET | `/health` | Model status check |
+
+---
+
+## 📦 Input Ranges
+
+| Parameter | Min | Max | Unit |
+|---|---|---|---|
+| Nitrogen (N) | 0 | 140 | kg/ha |
+| Phosphorus (P) | 5 | 145 | kg/ha |
+| Potassium (K) | 5 | 205 | kg/ha |
+| Temperature | 8 | 44 | °C |
+| Humidity | 14 | 100 | % |
+| pH | 3.5 | 10.0 | — |
+| Rainfall | 20 | 300 | mm |
+
+---
+
+## 🛠 Tech Stack
+
+- **ML**: scikit-learn, XGBoost, LightGBM, SHAP, Optuna
+- **Web**: Flask, Flask-SQLAlchemy, SQLite
+- **Viz**: Matplotlib, Seaborn
+- **Explainability**: SHAP TreeExplainer
+
+---
+
+## 📄 Dataset
+
+[Crop Recommendation Dataset – Kaggle](https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset)
+
+2200 samples · 22 crop classes · 7 raw features
